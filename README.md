@@ -382,7 +382,7 @@ void assert_failed(uint8_t *file, uint32_t line)
 ```
 FOR PULSE AT 500
 
-TON = 3 x 10 x 10^-6
+TON = (1 x 20 + 2.5 * 4) * 10^-6 
     = 0.00003
 TOFF=0.00003
 TOTAL TIME = TON + TOFF
