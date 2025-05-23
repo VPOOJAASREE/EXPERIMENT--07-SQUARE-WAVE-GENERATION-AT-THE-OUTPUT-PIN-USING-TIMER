@@ -274,7 +274,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 0;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 4294967295;
+  htim2.Init.Period = 1000;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_PWM_Init(&htim2) != HAL_OK)
@@ -288,7 +288,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 5000;
+  sConfigOC.Pulse = 500; // 700 // 900
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
   if (HAL_TIM_PWM_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
@@ -373,11 +373,11 @@ void assert_failed(uint8_t *file, uint32_t line)
  ![op c bw](https://github.com/user-attachments/assets/8462e7f0-f299-4ba7-adec-4f5165d75e3c)
 
 
-## DUTY CYCLE AND FREQUENCY CALCULATION 
+## DUTY CYCLE AND FREQUENCY CALCULATION:
 
 
+![500](https://github.com/user-attachments/assets/d5bd5494-e9b0-4dd4-8948-7e155a0638c7)
 
-![image](https://github.com/user-attachments/assets/54ff0928-6a9b-4038-a7e7-e171ac81721c)
 
 ```
 FOR PULSE AT 500
@@ -398,14 +398,15 @@ DUTY CYCLE = TON /(TON+TOFF)
            = 50 %
 ```
 
-![image](https://github.com/user-attachments/assets/c74c3d66-ea89-4a3a-96fa-ea5bded18870)
+![700](https://github.com/user-attachments/assets/9aae5c9c-4108-4b64-957f-e1291e7574bf)
+
 
 ```
 FOR PULSE AT 700
 
-TON = 4 x 10 x 10^-6
+TON = (2 x 20 + 1 * 4) * 10^-6
     = 0.00004
-TOFF= 2 x 10 x 10^-6
+TOFF= (4 * 4) * 10^-6
     = 0.00002
 TOTAL TIME = TON + TOFF
            = 0.00004+0.00002
@@ -414,26 +415,32 @@ FREQUENCY = 1/(TOTAL TIME)
           = 16666.7
 DUTY CYCLE = TON /(TON+TOFF)
            = 0.00004/0.00006
+           = 44 / 60
            = 0.7
       IN % =0.7*100 
            = 70 %
 ```
-![image](https://github.com/user-attachments/assets/4c0750a8-193d-4c73-85fc-2aa8894559c7)
+
+![900](https://github.com/user-attachments/assets/9aba1a6b-d33b-4ae5-9997-58b83812a10f)
+
 
 ```
 FOR PULSE AT 900
 
-TON = 1 x 50 x 10^-6
+TON = (2 x 20 + 4 * 4) * 10^-6
+    = 56  * 10^-6
     = 0.00005
-TOFF= 0.1 x 50 x 10^-6
-    = 0.000005
+TOFF= (1 * 4) * 10^-6
+    = 4  * 10^-6
+    = 0.000004
 TOTAL TIME = TON + TOFF
-           = 0.00005 + 0.000005
-           = 0.000055
+           = 0.00005 + 0.00004
+           = 0.000054
 FREQUENCY = 1/(TOTAL TIME)
           = 18181.82
 DUTY CYCLE = TON /(TON+TOFF)
-           = 0.00005/0.000055
+           = 0.00005/0.000054
+           = 56 / 60
            = 0.9
       IN % =0.9*100 
            = 90 %
